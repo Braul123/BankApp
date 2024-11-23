@@ -23,11 +23,16 @@ import { ThemeContextType } from '../types/interfaces';
       setIsDarkMode(colorScheme === 'dark');
       const colors = useColors(colorScheme === 'dark');
       setColors(colors);
-    }, [colorScheme]);
+    }, []);
   
-    // Funcion para cambiar el tema
+    // Función para cambiar el tema
     const toggleTheme = () => {
-      setIsDarkMode(prevMode => !prevMode);
+      setIsDarkMode(prevMode => {
+      const newMode = !prevMode;
+      const colors = useColors(newMode);
+      setColors(colors);
+      return newMode;
+      });
     };
   
     return (
