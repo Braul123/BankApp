@@ -4,7 +4,9 @@ import { colorsType } from "../types/types"
 export const colorsMain = {
     brand: {
         // backgroundPrimary: '#FAA61A',
-        backgroundPrimary: '#fde615',
+        // backgroundPrimary: '#fde615',
+        backgroundPrimary: '#f8e000',
+        backgroundSecondary: '#e3efff',
     },
     system: {
         primaryColorTextDarkMode: '#C5C7C8',
@@ -33,7 +35,13 @@ export const useColors = (isDarkMode: boolean) => {
         // Color de fondo de un contenedor
         backgroundStyle: {
             backgroundColor: isDarkMode ? colorsMain.system.darker : colorsMain.system.lighter,
-        }
+        },
+        backgroundButtonPrimary: {
+            backgroundColor: colorsMain.brand.backgroundPrimary,
+        },
+        backgroundButtonSecondary: {
+            backgroundColor: colorsMain.brand.backgroundSecondary,
+        },
     }
     return colors;
 }

@@ -4,10 +4,17 @@ import {View, Text, StyleSheet} from 'react-native';
 import IconApp from '../assets/icons/AllCustomIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useAuth} from '../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
 
 const Header: React.FC = () => {
   const {colors, toggleTheme, isDarkMode} = useTheme();
-  const {isAuthenticated} = useAuth();
+  const navigation: any = useNavigation();
+  const {isAuthenticated, logout} = useAuth();
+
+  const logoutApp = () => {
+    navigation.navigate('Welcome');
+    logout();
+  }
 
   return (
     <View style={[styles.header, colors.backgroundStyle]}>
@@ -25,7 +32,7 @@ const Header: React.FC = () => {
           )}
         </TouchableOpacity>
         {isAuthenticated && (
-          <TouchableOpacity activeOpacity={0.2} style={styles.touchAction}>
+          <TouchableOpacity activeOpacity={0.2} style={styles.touchAction} onPress={() => logoutApp()}>
             <IconApp
               name={'logout'}
               size={25}
