@@ -16,6 +16,9 @@ export const colorsMain = {
         backgroundColorTextSecondary: '#004aad',
         darker: '#1C1B1F',
         lighter: '#F4F4F5',
+        // Bordes
+        borderVariantLigth: '#DDE3EA',
+        borderVariantDark: '#41484D',
     },
 }
 
@@ -42,6 +45,9 @@ export const useColors = (isDarkMode: boolean) => {
         backgroundButtonSecondary: {
             backgroundColor: colorsMain.brand.backgroundSecondary,
         },
+        borderVariant: {
+            borderColor: isDarkMode ? colorsMain.system.borderVariantDark : colorsMain.system.borderVariantLigth
+        }
     }
     return colors;
 }
