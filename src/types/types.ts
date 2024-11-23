@@ -8,6 +8,7 @@ export type colorsType = {
     colorTextLogo: any;
     backgroundButtonPrimary: any;
     backgroundButtonSecondary: any;
+    borderVariant: any;
 }
 
 /**
@@ -34,4 +35,16 @@ export type IconTypeRequire = {
     size: number,
     position : 'left' | 'right',
     color: string
+}
+
+/**
+ * @description Tipo de los parametros que se deben exigir para producto
+ */
+export type ProductType = {
+    id: string,
+    name: string,
+    description: string,
+    logo: string,
+    date_release: string,
+    date_revision: string
 }
