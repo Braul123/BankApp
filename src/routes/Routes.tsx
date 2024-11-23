@@ -3,6 +3,7 @@ import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Welcome from '../pages/Welcome';
+import Home from '../pages/Home';
 
 
 export default function Routes() {
@@ -16,6 +17,13 @@ export default function Routes() {
             component={Welcome}
             options={{
               title: 'Login',
+              headerShown: false,
+              gestureEnabled: false,
+            }}></Nav.Screen>
+            <Nav.Screen
+            name="Home"
+            component={Home}
+            options={{
               headerShown: false,
               gestureEnabled: false,
             }}></Nav.Screen>

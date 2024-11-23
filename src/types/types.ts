@@ -6,6 +6,8 @@ export type colorsType = {
     colorText: any;
     backgroundStyle: any;
     colorTextLogo: any;
+    backgroundButtonPrimary: any;
+    backgroundButtonSecondary: any;
 }
 
 /**
@@ -21,4 +23,15 @@ export type DirectoryIconName = 'AntDesign' |
     'SimpleLineIcons' |
     'MaterialIcons' |
     'FontAwesome5' | 
-    'Ionicons'
+    'Ionicons';
+
+/**
+ * @description Parametros que se deben exigir para un icono dinamico
+ */
+export type IconTypeRequire = {
+    name: string
+    directory: DirectoryIconName,
+    size: number,
+    position : 'left' | 'right',
+    color: string
+}
