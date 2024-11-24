@@ -3,7 +3,7 @@ import React from 'react';
 import {useTheme} from '../context/ThemeContext';
 import MainLayout from '../layouts/MainLayout';
 import {styles} from '../styles/welcome.styles';
-import ButtonPrimary from '../components/ButtonPrimary';
+import ButtonPrimary from '../components/atoms/ButtonPrimary';
 import { colorsMain } from '../utils/colors';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';

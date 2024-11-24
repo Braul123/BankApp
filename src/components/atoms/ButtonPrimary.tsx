@@ -5,10 +5,10 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import IconApp from '../assets/icons/AllCustomIcons';
-import {IconTypeRequire} from '../types/types';
-import {useTheme} from '../context/ThemeContext';
-import {colorsMain} from '../utils/colors';
+import IconApp from '../../assets/icons/AllCustomIcons';
+import {IconTypeRequire} from '../../types/types';
+import {useTheme} from '../../context/ThemeContext';
+import {colorsMain} from '../../utils/colors';
 
 interface props {
   onPress: any;
@@ -69,7 +69,8 @@ export default function ButtonPrimary(data: props) {
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 40,
+    width: '100%',
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
     height: 60,

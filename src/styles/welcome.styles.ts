@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     gap: 30,
-    paddingTop: 50,
+    paddingTop: 70,
   },
   info: {
     width: '100%',

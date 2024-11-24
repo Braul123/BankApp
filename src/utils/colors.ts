@@ -3,10 +3,9 @@ import { colorsType } from "../types/types"
 // Colores primarios
 export const colorsMain = {
     brand: {
-        // backgroundPrimary: '#FAA61A',
         // backgroundPrimary: '#fde615',
         backgroundPrimary: '#f8e000',
-        backgroundSecondary: '#e3efff',
+        backgroundSecondary: '#d8e9ff',
     },
     system: {
         primaryColorTextDarkMode: '#C5C7C8',
@@ -17,8 +16,11 @@ export const colorsMain = {
         darker: '#1C1B1F',
         lighter: '#F4F4F5',
         // Bordes
-        borderVariantLigth: '#DDE3EA',
+        borderVariantLigth: '#bfc7d1',
         borderVariantDark: '#41484D',
+        // Placeholder
+        placeholderDarkMode: 'rgba(197, 199, 200, 0.5)',
+        placeholderLigthMode: 'rgba(25, 28, 29, 0.5)',
     },
 }
 
