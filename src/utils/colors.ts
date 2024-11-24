@@ -1,3 +1,4 @@
+
 import { colorsType } from "../types/types"
 
 // Colores primarios
@@ -45,7 +46,10 @@ export const useColors = (isDarkMode: boolean) => {
             backgroundColor: colorsMain.brand.backgroundPrimary,
         },
         backgroundButtonSecondary: {
-            backgroundColor: colorsMain.brand.backgroundSecondary,
+            backgroundColor: isDarkMode ? 'rgba(236, 239, 245, 0.1)' : colorsMain.brand.backgroundSecondary,
+            borderWidth: isDarkMode ? 1 : 0,
+            borderColor: colorsMain.system.borderVariantDark,
+
         },
         borderVariant: {
             borderColor: isDarkMode ? colorsMain.system.borderVariantDark : colorsMain.system.borderVariantLigth

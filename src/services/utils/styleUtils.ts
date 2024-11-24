@@ -11,11 +11,14 @@
  */
 export const getStylesCard = (index: number, length: number) => {
     if (index === 0) {
-      return {
+      let styles = {
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
+        borderBottomStartRadius: length === 1 ? 10 : 0,
+        borderBottomEndRadius: length === 1 ? 10 : 0,
         borderTopWidth: 1,
       };
+      return styles;
     } else if (index === length - 1) {
       return {
         borderBottomLeftRadius: 10,

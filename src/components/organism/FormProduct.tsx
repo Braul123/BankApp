@@ -35,7 +35,7 @@ const ProductFormOrganism: React.FC<ProductFormOrganismProps> = ({ dataForm, set
   }, [setFormData]);
 
   return (
-    <View style={styles.form}>
+    <View>
       <InputField
         label="ID"
         placeholder="ID del producto"
@@ -104,9 +104,3 @@ const ProductFormOrganism: React.FC<ProductFormOrganismProps> = ({ dataForm, set
 }
 
 export default React.memo(ProductFormOrganism);
-
-const styles = StyleSheet.create({
-  form: {
-    padding: 16,
-  },
-});

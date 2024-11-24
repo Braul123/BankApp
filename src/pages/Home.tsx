@@ -7,10 +7,11 @@ import { ProductType } from '../types/types';
 import CardProduct from '../components/atoms/CardProduct';
 import ButtonPrimary from '../components/atoms/ButtonPrimary';
 import { useNavigation } from '@react-navigation/native';
-import SkeletonItemProduct from '../components/atoms/SkeletonItemProduct';
 import SkeletonListProduct from '../components/molecules/SkeletonListProduct';
 import { getStylesCard } from '../services/utils/styleUtils';
 import NotFoundData from '../components/atoms/NotFoundData';
+import SearchApp from '../components/molecules/SearchApp';
+import { styles } from '../styles/home.styles';
 
 export default function Home() {
   const MemoizedCardProduct = React.memo(CardProduct);
@@ -18,6 +19,9 @@ export default function Home() {
   const [refreshing, setRefreshing] = useState(false);
   const navigation: any = useNavigation();
   const [products, setProducts] = useState<any>([]);
+  const [productsFilter, setProductsFilter] = useState<any>([]);
+  const [searchText, setSearchText] = useState<string>('');
+
   const [isProgress, setIsProgress] = useState(true);
 
   useEffect(() => {
@@ -34,6 +38,8 @@ export default function Home() {
     try {
       const _products: any = await fetchGetProducts();
       setProducts(_products.data);
+      setProductsFilter(_products.data);
+
       setTimeout(() => {
         setIsProgress(false);
         setRefreshing(false);
@@ -46,29 +52,36 @@ export default function Home() {
 
   // Renderiza cada item del FlatList
   const renderItem = useCallback(({ item, index }: { item: ProductType, index: number }) => {
-    const stylesCard = getStylesCard(index, products.length);
+    const stylesCard = getStylesCard(index, productsFilter.length);
     return (
       <MemoizedCardProduct item={item} stylesCard={stylesCard}/>
     )
-  }, [products]);
+  }, [products, productsFilter]);
 
   // Redirecciona a la vista de creacion de producto
   const createProduct = useCallback(() => {
     navigation.navigate({name: 'Forms', params: {type: 'create'}});
   }, [navigation]);
 
+  // Filtra los productos
+  const filterAction = useCallback((event: any) => {
+    setProductsFilter(event);
+  }, []);
+
   return (
     <MainLayout>
-      <View style={{flex: 1}}>
+      <View style={styles.layoutHome}>
         {
-          !isProgress && products.length > 0 && (
-            <View style={{height: 50, width: '100%', marginBottom:16, backgroundColor: 'blue'}}></View>
-          )
+          <SearchApp
+          dataByFilter={products}
+          onPress={(event: any) => filterAction(event)}
+          searchText={searchText}
+          setSearchText={setSearchText}/>
         }
  
           {
             isProgress ? (
-              <View style={{flex: 1}}>
+              <View style={styles.layoutHome}>
                 <SkeletonListProduct numberOfSkeletons={5}/>
               </View>
             ): (
@@ -82,23 +95,24 @@ export default function Home() {
                       textBottom={'Opps! No se encontró nada aquí, crea tu primer producto desde el botón Agregar.'}/>
                     </View>
                   ) : (
-                    <FlatList
-                    style={[colors.borderVariant]}
-                    data={products}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.id}
-                    initialNumToRender={10}
-                    maxToRenderPerBatch={10}
-                    refreshControl={
-                      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                    }
-                  />
+                      <FlatList
+                      style={[colors.borderVariant, {paddingTop: 30}]}
+                      data={productsFilter}
+                      renderItem={renderItem}
+                      keyExtractor={item => item.id}
+                      initialNumToRender={10}
+                      maxToRenderPerBatch={10}
+                      refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                      }
+                    />
+
                   )
                 }
               </>
             )
           }
-          <View style={{paddingVertical: 10, paddingHorizontal: 10}}>
+          <View style={{paddingVertical: 10}}>
             <ButtonPrimary onPress={() => createProduct()} title={'Agregar'} status={'enabled'} typeButton={'primary'}/>
           </View>
       </View>

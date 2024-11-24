@@ -1,4 +1,4 @@
-import {View, StyleSheet, KeyboardAvoidingView, Platform, Alert} from 'react-native';
+import {View, StyleSheet, KeyboardAvoidingView, Platform, Alert, Text} from 'react-native';
 import React, {useCallback, useMemo, useState} from 'react';
 import MainLayout from '../layouts/MainLayout';
 import ProductFormOrganism from '../components/organism/FormProduct';
@@ -9,6 +9,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import { fetchCreateProduct, verificationID } from '../services/api/productService';
 import useFormValidation from '../hooks/ValidateForm';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Forms() {
   const [submited, setSubmited] = useState(false);
@@ -24,7 +25,7 @@ export default function Forms() {
   
   const [formData, setFormData] = useState<ProductType>(initialFormData);
 
-  
+  const {colors} = useTheme();
   const { validateForm } = useFormValidation(formData);
 
   // Envía el formulario
@@ -91,6 +92,10 @@ export default function Forms() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
           >
+            {/* Titulo de la pagina */}
+            <View style={[styles.titleContent]}>
+              <Text style={[colors.colorText, styles.title]}>Formulario de registro</Text>
+            </View>
           {/* Formulario */}
           <View style={{flex: 1}}>
             <ProductFormOrganism
@@ -114,10 +119,9 @@ export default function Forms() {
             onPress={resetForm}
             title={'Reiniciar'}
             status={'enabled'}
-            typeButton={'primary'}
+            typeButton={'secondary'}
             style={{
               marginTop: 10,
-              backgroundColor: colorsMain.brand.backgroundSecondary,
               height: 50,
             }}
           />
@@ -135,4 +139,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 0,
   },
+  titleContent: {
+    paddingVertical: 20,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+  }
 });

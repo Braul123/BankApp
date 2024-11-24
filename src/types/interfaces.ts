@@ -100,3 +100,13 @@ export interface ProductFormOrganismProps {
   setFormData: any;
   submited: boolean;
 }
+
+/**
+ * @description Propiedades para el componente SearchApp
+ */
+export interface SearchProps {
+  dataByFilter: any[];
+  searchText: string;
+  setSearchText: (text: string) => void;
+  onPress: (filteredData: any[]) => void;
+}

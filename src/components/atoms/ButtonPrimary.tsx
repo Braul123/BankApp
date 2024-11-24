@@ -19,7 +19,7 @@ const ButtonPrimary: React.FC<PropsButtonPrimary> = ({
   textStyles,
   icon,
 }) => {
-  const {colors} = useTheme();
+  const {colors, isDarkMode} = useTheme();
 
   const buttonStyle = [
     styles.button,
@@ -31,7 +31,7 @@ const ButtonPrimary: React.FC<PropsButtonPrimary> = ({
 
   const textStyle = [
     styles.textButton,
-    { color: colorsMain.system.backgroundColorTextSecondary },
+    { color: isDarkMode && typeButton === "secondary" ? colors.colorText.color : colorsMain.system.backgroundColorTextSecondary },
     textStyles,
   ];
 
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 60,
+    height: 55,
   },
   textButton: {
     fontSize: 16,
