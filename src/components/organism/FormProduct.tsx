@@ -3,6 +3,8 @@ import {View, StyleSheet} from 'react-native';
 import InputField from '../molecules/InputField';
 import {ProductType} from '../../types/types';
 import {useTheme} from '../../context/ThemeContext';
+import useFormValidation from '../../hooks/ValidateForm';
+import { add, format, parse } from 'date-fns';
 
 interface ProductFormOrganismProps {
   dataForm: ProductType;
@@ -11,44 +13,30 @@ interface ProductFormOrganismProps {
 }
 
 export default function ProductFormOrganism(data: ProductFormOrganismProps) {
-  const [errors, setErrors] = useState<any>({});
+
+  // Validación de formulario - Hook personalizado
+  const { errors, validateForm, resetValidation } = useFormValidation(data.dataForm);
 
   useEffect(() => {
-    validateForm();
+    if (data.submited) {
+      validateForm();
+    } else {
+      resetValidation();
+    }
   }, [data.dataForm, data.submited]);
 
   const handleChange = (field: any, value: any) => {
-    data.setFormData((prev: ProductType) => ({...prev, [field]: value}));
-  };
-
-  const validateForm = () => {
-    // Si el estado de envío es falso, no se valida
-    if (!data.submited) {
-      setErrors({});
-      return;
+    let _value = value;
+    console.log('field', field, value);
+    // Si es el campo de fecha le da formato al valor
+    if ( field === 'date_release') {
+        // Se suma un año a la fecha de liberación para obtener la fecha de revisión
+        const date_revision = format(add(value, { years: 1 }), "yyyy-MM-dd'T'HH:mm:ss"); 
+        const parsedDate = format(_value, "yyyy-MM-dd'T'HH:mm:ss");
+        data.setFormData((prev: ProductType) => ({...prev, [field]: parsedDate, date_revision}));
+    } else {
+      data.setFormData((prev: ProductType) => ({...prev, [field]: _value}));
     }
-    const newErrors: any = {};
-
-    // Validación de ID mayor a 5 caracteres
-    if (data.dataForm.id.length >= 0 && data.dataForm.id.length < 3) {
-      newErrors.id = "El ID debe tener al menos 3 caracteres";
-    }
-    // Validación de nombre mayor a 5 caracteres
-    if (data.dataForm.name.length >= 0 && data.dataForm.name.length < 5) {
-      newErrors.name = "El nombre debe tener al menos 5 caracteres";
-    }
-    // Validación de descripción mayor a 10 caracteres
-    if (data.dataForm.description.length >= 0 && data.dataForm.description.length < 10) {
-      newErrors.description = "La descripción debe tener al menos 10 caracteres";
-    }
-    // Vlidación de logo
-    if (data.dataForm.logo.length == 0) {
-      newErrors.logo = "El logo es requerido";
-    }
-    
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
   };
 
   return (
@@ -93,6 +81,13 @@ export default function ProductFormOrganism(data: ProductFormOrganismProps) {
         onChangeText={(text: string) => handleChange('date_release', text)}
         error={errors.date_release}
         maxLength={100}
+        disabled={true}
+        datePicker={{
+          show: false,
+          mode: 'date',
+          minDate: new Date(),
+          disabled:false
+        }}
       />
       <InputField
         label="Date Revision"
@@ -101,6 +96,7 @@ export default function ProductFormOrganism(data: ProductFormOrganismProps) {
         onChangeText={(text: string) => handleChange('date_revision', text)}
         error={errors.date_revision}
         maxLength={100}
+        disabled={true}
       />
     </View>
   );

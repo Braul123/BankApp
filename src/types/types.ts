@@ -45,6 +45,16 @@ export type ProductType = {
     name: string,
     description: string,
     logo: string,
-    date_release: string,
-    date_revision: string
+    date_release: any,
+    date_revision: any
+}
+
+/**
+ * @description Tipo de los parametros que se deben exigir para un input de tipo fecha
+ */
+export type TypeDatePickerInput = {
+    show: boolean;
+    mode: 'date' | 'time' | 'datetime';
+    minDate: Date;
+    disabled: boolean;
 }

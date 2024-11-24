@@ -3,7 +3,7 @@ import {View, StyleSheet, KeyboardTypeOptions} from 'react-native';
 import LabelAtom from '../atoms/LabelAtom';
 import InputAtom from '../atoms/Input';
 import ErrorInput from '../atoms/ErrorInput';
-import { Text } from 'react-native-reanimated/lib/typescript/Animated';
+import { TypeDatePickerInput } from '../../types/types';
 
 interface InputFieldProps {
   label: string;
@@ -13,6 +13,8 @@ interface InputFieldProps {
   keyboardType?: KeyboardTypeOptions;
   error: any;
   maxLength: number;
+  datePicker?: TypeDatePickerInput;
+  disabled?: boolean;
 }
 
 export default function InputField(data: InputFieldProps) {
@@ -26,6 +28,8 @@ export default function InputField(data: InputFieldProps) {
         keyboardType={data.keyboardType}
         error={data.error}
         maxLength={data.maxLength}
+        datePicker={data.datePicker}
+        disabled={data.disabled ? true : false}
       />
       {data.error && (
         <ErrorInput text={data.error} />

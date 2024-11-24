@@ -1,23 +1,17 @@
-import {
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, KeyboardAvoidingView, Platform} from 'react-native';
+import React, {useState} from 'react';
 import MainLayout from '../layouts/MainLayout';
 import ProductFormOrganism from '../components/organism/FormProduct';
 import {ProductType} from '../types/types';
 import ButtonPrimary from '../components/atoms/ButtonPrimary';
-import {useTheme} from '../context/ThemeContext';
-import { colorsMain } from '../utils/colors';
-import { ScrollView } from 'react-native-gesture-handler';
+import {colorsMain} from '../utils/colors';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export default function Forms() {
   const [submited, setSubmited] = useState(false);
   const [formData, setFormData] = useState<ProductType>({
     id: '',
-    name: 'Hola mundo 1',
+    name: '',
     description: '',
     logo: '',
     date_release: '',
@@ -43,43 +37,48 @@ export default function Forms() {
   };
 
   return (
-<MainLayout>
-  <KeyboardAvoidingView
-    style={{ flex: 1 }}
-    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-  >
-    <ScrollView
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
-    >
-      <View style={{ flex: 1 }}>
-        <ProductFormOrganism
-          dataForm={formData}
-          setFormData={setFormData}
-          submited={submited}
-        />
-      </View>
-    </ScrollView>
+    <MainLayout>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <ScrollView
+          contentContainerStyle={{flexGrow: 1}}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          >
+          {/* Formulario */}
+          <View style={{flex: 1}}>
+            <ProductFormOrganism
+              dataForm={formData}
+              setFormData={setFormData}
+              submited={submited}
+            />
+          </View>
+        </ScrollView>
 
-    <View style={styles.contentButtonForm}>
-      <ButtonPrimary
-        onPress={onSubmit}
-        title={'Enviar'}
-        status={'enabled'}
-        typeButton={'primary'}
-        style={{ height: 50 }}
-      />
-      <ButtonPrimary
-        onPress={resetForm}
-        title={'Reiniciar'}
-        status={'enabled'}
-        typeButton={'primary'}
-        style={{ marginTop: 10, backgroundColor: colorsMain.brand.backgroundSecondary, height: 50 }}
-      />
-    </View>
-  </KeyboardAvoidingView>
-</MainLayout>
-
+        {/* Botones de envío y reinicio */}
+        <View style={styles.contentButtonForm}>
+          <ButtonPrimary
+            onPress={onSubmit}
+            title={'Enviar'}
+            status={'enabled'}
+            typeButton={'primary'}
+            style={{height: 50}}
+          />
+          <ButtonPrimary
+            onPress={resetForm}
+            title={'Reiniciar'}
+            status={'enabled'}
+            typeButton={'primary'}
+            style={{
+              marginTop: 10,
+              backgroundColor: colorsMain.brand.backgroundSecondary,
+              height: 50,
+            }}
+          />
+        </View>
+      </KeyboardAvoidingView>
+    </MainLayout>
   );
 }
 
