@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import { useTheme } from '../context/ThemeContext';
-import { ProductType } from '../types/types';
+import { useTheme } from '../../context/ThemeContext';
+import { ProductType } from '../../types/types';
 
 
 

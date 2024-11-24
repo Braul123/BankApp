@@ -8,16 +8,15 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { colors, isDarkMode } = useTheme();
 
     return (
-        <SafeAreaView style={[styles.container, colors.backgroundStyle]}>
+        <View style={[styles.container, colors.backgroundStyle]}>
              <StatusBar
                 hidden={false}
                 barStyle={isDarkMode ? 'light-content' : 'dark-content'}
             />
-            <Header/>
             <View style={styles.content}>
                 {children}
             </View>
-        </SafeAreaView>
+        </View>
     );
 };
 

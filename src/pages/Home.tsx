@@ -4,12 +4,14 @@ import MainLayout from '../layouts/MainLayout'
 import { fetchGetProducts } from '../services/api/productService'
 import { useTheme } from '../context/ThemeContext';
 import { ProductType } from '../types/types';
-import CardProduct from '../components/cardProduct';
-import ButtonPrimary from '../components/ButtonPrimary';
+import CardProduct from '../components/atoms/CardProduct';
+import ButtonPrimary from '../components/atoms/ButtonPrimary';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Home() {
   const { colors } = useTheme();
   const [refreshing, setRefreshing] = useState(false); // Muestra el indicador de progreso del header (deslizar para refrescar)
+  const navigation: any = useNavigation();
   const [products, setProducts] = useState(
     [
       {
@@ -58,11 +60,17 @@ export default function Home() {
     <CardProduct {...item}/>
   );
 
+  // Redirecciona a la vista de creacion de producto
+  const createProduct = () => {
+    console.log('Crear producto');
+    navigation.navigate({name: 'Forms', params: {type: 'create'}});
+  }
+
 
   return (
     <MainLayout>
       <View style={{flex: 1}}>
-          <View style={{height: 50, width: '100%', marginBottom:16}}></View>
+          <View style={{height: 50, width: '100%', marginBottom:16, backgroundColor: 'blue'}}></View>
           <FlatList
             style={[colors.borderVariant]}
             data={products}
@@ -72,8 +80,8 @@ export default function Home() {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
           />
-          <View>
-            <ButtonPrimary onPress={undefined} title={'Agregar'} status={'enabled'} typeButton={'primary'}/>
+          <View style={{paddingVertical: 10, paddingHorizontal: 16}}>
+            <ButtonPrimary onPress={() => createProduct()} title={'Agregar'} status={'enabled'} typeButton={'primary'}/>
           </View>
       </View>
     </MainLayout>

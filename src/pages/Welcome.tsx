@@ -3,7 +3,7 @@ import React from 'react';
 import {useTheme} from '../context/ThemeContext';
 import MainLayout from '../layouts/MainLayout';
 import {styles} from '../styles/welcome.styles';
-import ButtonPrimary from '../components/ButtonPrimary';
+import ButtonPrimary from '../components/atoms/ButtonPrimary';
 import { colorsMain } from '../utils/colors';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
@@ -24,7 +24,7 @@ export default function Welcome() {
       <View style={styles.content}>
 
         <View>
-          <Image source={require('../assets/images/logo.png')} style={{width: 150, height: 150, borderRadius: 100}}/>
+          <Image source={require('../assets/images/logo.png')} style={{width: 150, height: 150, borderRadius: 16}}/>
         </View>
 
         <View style={styles.info}>
