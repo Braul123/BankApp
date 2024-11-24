@@ -1,4 +1,4 @@
-import {View, StyleSheet, KeyboardAvoidingView, Platform} from 'react-native';
+import {View, StyleSheet, KeyboardAvoidingView, Platform, Alert} from 'react-native';
 import React, {useState} from 'react';
 import MainLayout from '../layouts/MainLayout';
 import ProductFormOrganism from '../components/organism/FormProduct';
@@ -6,9 +6,13 @@ import {ProductType} from '../types/types';
 import ButtonPrimary from '../components/atoms/ButtonPrimary';
 import {colorsMain} from '../utils/colors';
 import {ScrollView} from 'react-native-gesture-handler';
+import { fetchCreateProduct, verificationID } from '../services/api/productService';
+import useFormValidation from '../hooks/ValidateForm';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Forms() {
   const [submited, setSubmited] = useState(false);
+  const navigation: any = useNavigation();
   const [formData, setFormData] = useState<ProductType>({
     id: '',
     name: '',
@@ -17,10 +21,56 @@ export default function Forms() {
     date_release: '',
     date_revision: '',
   });
+  
+  const { validateForm } = useFormValidation(formData);
 
   // Envía el formulario
   const onSubmit = () => {
     setSubmited(true);
+    // Si el formulario es válido, guarda los datos
+    if (validateForm()) {
+      validateID();
+    }
+  };
+
+  // Prepara los datos para ser guardados
+  const validateID = async () => {
+    try {
+      const verifyID = await verificationID(formData.id);
+      // Si el id no esta registrado, guarda los datos
+      if (!verifyID) {
+        saveData();
+      } else {
+        Alert.alert('ID ya registrado', 'El ID del producto ya existe');
+      }
+    } catch (error) {
+      console.error('Error al preparar los datos', error);
+    }
+  }
+
+  // Navega a la lista de productos
+  const goBack = () => {
+    navigation.goBack();
+  }
+
+  // Guarda los datos
+  const saveData = async () => {
+    try {
+      await fetchCreateProduct(formData);
+      Alert.alert('Datos guardados', 'Los datos se han guardado correctamente', [
+        {
+          text: 'Seguir creando',
+        },
+        {
+          text: 'Ir a la lista',
+          onPress: () => {goBack()}
+        },
+      ]
+      );
+      resetForm();
+    } catch (error) {
+      console.error('Error al guardar los datos', error);
+    }
   };
 
   // Reinicia el formulario

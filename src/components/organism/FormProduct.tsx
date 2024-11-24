@@ -27,7 +27,6 @@ export default function ProductFormOrganism(data: ProductFormOrganismProps) {
 
   const handleChange = (field: any, value: any) => {
     let _value = value;
-    console.log('field', field, value);
     // Si es el campo de fecha le da formato al valor
     if ( field === 'date_release') {
         // Se suma un año a la fecha de liberación para obtener la fecha de revisión
@@ -97,6 +96,12 @@ export default function ProductFormOrganism(data: ProductFormOrganismProps) {
         error={errors.date_revision}
         maxLength={100}
         disabled={true}
+        datePicker={{
+          show: false,
+          mode: 'date',
+          minDate: new Date(),
+          disabled:true
+        }}
       />
     </View>
   );

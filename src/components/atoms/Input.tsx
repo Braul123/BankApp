@@ -25,7 +25,9 @@ export default function InputAtom(data: InputAtomProps) {
   const [dateP, setDateP] = useState<any>();
 
   useEffect(() => {
-    setDateP(data.value);
+    if (data.datePicker){
+      setDateP(data.value);
+    }
   }, [data.value]);
 
   const parseDate = () => {    
@@ -33,7 +35,7 @@ export default function InputAtom(data: InputAtomProps) {
       const dateFormat = new Date(dateP);
       return format(dateFormat, "dd-MM-yyyy");
     } else {
-      return '';
+      return data.value;
     }
   }
 
