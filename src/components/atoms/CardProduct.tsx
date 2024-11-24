@@ -36,21 +36,23 @@ const styles = StyleSheet.create({
   },
   info: {
     width: '85%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    gap: 3,
   },
   icon: {
-    width: '15%',
-    height: 50,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
     fontSize: 18,
-    lineHeight: 24,
+    lineHeight: 22,
     fontWeight: '500',
     userSelect: 'text',
   },
   id: {
-    fontSize: 16,
+    fontSize: 14,
     lineHeight: 20,
     userSelect: 'text',
   },

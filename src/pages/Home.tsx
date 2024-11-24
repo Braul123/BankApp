@@ -7,13 +7,18 @@ import { ProductType } from '../types/types';
 import CardProduct from '../components/atoms/CardProduct';
 import ButtonPrimary from '../components/atoms/ButtonPrimary';
 import { useNavigation } from '@react-navigation/native';
+import SkeletonItemProduct from '../components/atoms/SkeletonItemProduct';
+import SkeletonListProduct from '../components/molecules/SkeletonListProduct';
+import { getStylesCard } from '../services/utils/styleUtils';
+import NotFoundData from '../components/atoms/NotFoundData';
 
 export default function Home() {
   const MemoizedCardProduct = React.memo(CardProduct);
   const { colors } = useTheme();
   const [refreshing, setRefreshing] = useState(false);
   const navigation: any = useNavigation();
-  const [products, setProducts] = useState<any>();
+  const [products, setProducts] = useState<any>([]);
+  const [isProgress, setIsProgress] = useState(true);
 
   useEffect(() => {
     getProducts();
@@ -30,6 +35,7 @@ export default function Home() {
       const _products: any = await fetchGetProducts();
       setProducts(_products.data);
       setTimeout(() => {
+        setIsProgress(false);
         setRefreshing(false);
       }, 500);
       console.log('PRODUCTOS',_products.data);
@@ -40,29 +46,7 @@ export default function Home() {
 
   // Renderiza cada item del FlatList
   const renderItem = useCallback(({ item, index }: { item: ProductType, index: number }) => {
-    let stylesCard: any;
-
-    // Aplica los bordes redondeados al primer y último item
-    switch (index) {
-      case 0:
-        stylesCard = {
-          borderTopLeftRadius: 10,
-          borderTopRightRadius: 10,
-        }
-        break;
-      case products.length - 1:
-        stylesCard = {
-          borderBottomLeftRadius: 10,
-          borderBottomRightRadius: 10,
-        }
-        break;
-      default:
-        stylesCard = {
-          borderBottomWidth: 1,
-        }
-        break;
-    }
-
+    const stylesCard = getStylesCard(index, products.length);
     return (
       <MemoizedCardProduct item={item} stylesCard={stylesCard}/>
     )
@@ -76,19 +60,45 @@ export default function Home() {
   return (
     <MainLayout>
       <View style={{flex: 1}}>
-          <View style={{height: 50, width: '100%', marginBottom:16, backgroundColor: 'blue'}}></View>
-          <FlatList
-            style={[colors.borderVariant]}
-            data={products}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-            initialNumToRender={10}
-            maxToRenderPerBatch={10}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-          />
-          <View style={{paddingVertical: 10, paddingHorizontal: 16}}>
+        {
+          !isProgress && products.length > 0 && (
+            <View style={{height: 50, width: '100%', marginBottom:16, backgroundColor: 'blue'}}></View>
+          )
+        }
+ 
+          {
+            isProgress ? (
+              <View style={{flex: 1}}>
+                <SkeletonListProduct numberOfSkeletons={5}/>
+              </View>
+            ): (
+              <>
+                {
+                  products.length === 0 ? (
+                    <View style={{flex:1}}>
+                      <NotFoundData
+                      width={240}
+                      heigth={300}
+                      textBottom={'Opps! No se encontró nada aquí, crea tu primer producto desde el botón Agregar.'}/>
+                    </View>
+                  ) : (
+                    <FlatList
+                    style={[colors.borderVariant]}
+                    data={products}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.id}
+                    initialNumToRender={10}
+                    maxToRenderPerBatch={10}
+                    refreshControl={
+                      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                    }
+                  />
+                  )
+                }
+              </>
+            )
+          }
+          <View style={{paddingVertical: 10, paddingHorizontal: 10}}>
             <ButtonPrimary onPress={() => createProduct()} title={'Agregar'} status={'enabled'} typeButton={'primary'}/>
           </View>
       </View>
