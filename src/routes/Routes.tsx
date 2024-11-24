@@ -1,12 +1,12 @@
 import {View, Text, SafeAreaView} from 'react-native';
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import Welcome from '../pages/Welcome';
 import Home from '../pages/Home';
 import Forms from '../pages/Forms';
 import Header from '../layouts/Header';
-import { useTheme } from '../context/ThemeContext';
+import {useTheme} from '../context/ThemeContext';
 
 export default function Routes() {
   const Nav = createNativeStackNavigator();

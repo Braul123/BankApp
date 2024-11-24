@@ -1,10 +1,7 @@
 import React from 'react';
 import {Text, StyleSheet} from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
-
-interface LabelAtomProps {
-  text: string;
-}
+import { LabelAtomProps } from '../../types/interfaces';
 
 export default function LabelAtom(data: LabelAtomProps) {
   const {colors} = useTheme();

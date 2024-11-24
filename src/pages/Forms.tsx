@@ -1,5 +1,5 @@
-import {View, StyleSheet, KeyboardAvoidingView, Platform, Alert} from 'react-native';
-import React, {useState} from 'react';
+import {View, StyleSheet, KeyboardAvoidingView, Platform, Alert, Text} from 'react-native';
+import React, {useCallback, useMemo, useState} from 'react';
 import MainLayout from '../layouts/MainLayout';
 import ProductFormOrganism from '../components/organism/FormProduct';
 import {ProductType} from '../types/types';
@@ -9,32 +9,36 @@ import {ScrollView} from 'react-native-gesture-handler';
 import { fetchCreateProduct, verificationID } from '../services/api/productService';
 import useFormValidation from '../hooks/ValidateForm';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Forms() {
   const [submited, setSubmited] = useState(false);
   const navigation: any = useNavigation();
-  const [formData, setFormData] = useState<ProductType>({
+  const initialFormData = useMemo(() => ({
     id: '',
     name: '',
     description: '',
     logo: '',
     date_release: '',
     date_revision: '',
-  });
+  }), []);
   
+  const [formData, setFormData] = useState<ProductType>(initialFormData);
+
+  const {colors} = useTheme();
   const { validateForm } = useFormValidation(formData);
 
   // Envía el formulario
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     setSubmited(true);
     // Si el formulario es válido, guarda los datos
     if (validateForm()) {
       validateID();
     }
-  };
+  }, [validateForm, formData]);
 
   // Prepara los datos para ser guardados
-  const validateID = async () => {
+  const validateID = useCallback(async () => {
     try {
       const verifyID = await verificationID(formData.id);
       // Si el id no esta registrado, guarda los datos
@@ -46,15 +50,15 @@ export default function Forms() {
     } catch (error) {
       console.error('Error al preparar los datos', error);
     }
-  }
+  }, [formData]);
 
   // Navega a la lista de productos
-  const goBack = () => {
+  const goBack = useCallback(() => {
     navigation.goBack();
-  }
+  }, [navigation]);
 
   // Guarda los datos
-  const saveData = async () => {
+  const saveData = useCallback(async () => {
     try {
       await fetchCreateProduct(formData);
       Alert.alert('Datos guardados', 'Los datos se han guardado correctamente', [
@@ -63,28 +67,20 @@ export default function Forms() {
         },
         {
           text: 'Ir a la lista',
-          onPress: () => {goBack()}
+          onPress: () => { goBack() }
         },
-      ]
-      );
+      ]);
       resetForm();
     } catch (error) {
       console.error('Error al guardar los datos', error);
     }
-  };
+  }, [formData, goBack]);
 
   // Reinicia el formulario
-  const resetForm = () => {
-    setFormData({
-      id: '',
-      name: '',
-      description: '',
-      logo: '',
-      date_release: '',
-      date_revision: '',
-    });
+  const resetForm = useCallback(() => {
+    setFormData(initialFormData);
     setSubmited(false);
-  };
+  }, [initialFormData]);
 
   return (
     <MainLayout>
@@ -96,6 +92,10 @@ export default function Forms() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
           >
+            {/* Titulo de la pagina */}
+            <View style={[styles.titleContent]}>
+              <Text style={[colors.colorText, styles.title]}>Formulario de registro</Text>
+            </View>
           {/* Formulario */}
           <View style={{flex: 1}}>
             <ProductFormOrganism
@@ -119,10 +119,9 @@ export default function Forms() {
             onPress={resetForm}
             title={'Reiniciar'}
             status={'enabled'}
-            typeButton={'primary'}
+            typeButton={'secondary'}
             style={{
               marginTop: 10,
-              backgroundColor: colorsMain.brand.backgroundSecondary,
               height: 50,
             }}
           />
@@ -140,4 +139,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 0,
   },
+  titleContent: {
+    paddingVertical: 20,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+  }
 });

@@ -6,60 +6,60 @@ import {
 } from 'react-native';
 import React from 'react';
 import IconApp from '../../assets/icons/AllCustomIcons';
-import {IconTypeRequire} from '../../types/types';
 import {useTheme} from '../../context/ThemeContext';
 import {colorsMain} from '../../utils/colors';
+import { PropsButtonPrimary } from '../../types/interfaces';
 
-interface props {
-  onPress: any;
-  title: string;
-  status: 'enabled' | 'disabled';
-  typeButton: 'primary' | 'secondary';
-  style?: any;
-  textStyles?: any;
-  icon?: IconTypeRequire;
-}
+const ButtonPrimary: React.FC<PropsButtonPrimary> = ({
+  onPress,
+  title,
+  status,
+  typeButton,
+  style,
+  textStyles,
+  icon,
+}) => {
+  const {colors, isDarkMode} = useTheme();
 
-export default function ButtonPrimary(data: props) {
-  const {colors} = useTheme();
+  const buttonStyle = [
+    styles.button,
+    typeButton === 'primary'
+      ? colors.backgroundButtonPrimary
+      : colors.backgroundButtonSecondary,
+    style,
+  ];
+
+  const textStyle = [
+    styles.textButton,
+    { color: isDarkMode && typeButton === "secondary" ? colors.colorText.color : colorsMain.system.backgroundColorTextSecondary },
+    textStyles,
+  ];
 
   return (
     <TouchableOpacity
       activeOpacity={0.7}
-      style={[
-        styles.button,
-        data.typeButton == 'primary'
-          ? colors.backgroundButtonPrimary
-          : colors.backgroundButtonSecondary,
-        {...data.style},
-      ]}
-      onPress={data.status == 'enabled' ? data.onPress : null}>
+      style={buttonStyle}
+      onPress={status == 'enabled' ? onPress : null}>
       <View
         style={styles.viewContent}>
-        {data.icon && data.icon.position === 'left' && (
+        {icon && icon.position === 'left' && (
           <IconApp
-            name={data.icon.name}
-            directoryName={data.icon.directory}
-            size={data.icon.size}
-            color={data.icon.color}
+            name={icon.name}
+            directoryName={icon.directory}
+            size={icon.size}
+            color={icon.color}
           />
         )}
         <Text
-          style={[
-            styles.textButton,
-            {
-              color: colorsMain.system.backgroundColorTextSecondary,
-              ...data.textStyles,
-            },
-          ]}>
-          {data.title}
+          style={textStyle}>
+          {title}
         </Text>
-        {data.icon && data.icon.position === 'right' && (
+        {icon && icon.position === 'right' && (
           <IconApp
-            name={data.icon.name}
-            directoryName={data.icon.directory}
-            size={data.icon.size}
-            color={data.icon.color}
+            name={icon.name}
+            directoryName={icon.directory}
+            size={icon.size}
+            color={icon.color}
           />
         )}
       </View>
@@ -67,13 +67,15 @@ export default function ButtonPrimary(data: props) {
   );
 }
 
+export default React.memo(ButtonPrimary);
+
 const styles = StyleSheet.create({
   button: {
     width: '100%',
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 60,
+    height: 55,
   },
   textButton: {
     fontSize: 16,

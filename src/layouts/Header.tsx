@@ -1,5 +1,5 @@
 import {useTheme} from '../context/ThemeContext';
-import React from 'react';
+import React, { useCallback } from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import IconApp from '../assets/icons/AllCustomIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -11,10 +11,10 @@ const Header: React.FC = () => {
   const navigation: any = useNavigation();
   const {isAuthenticated, logout} = useAuth();
 
-  const logoutApp = () => {
+  const logoutApp = useCallback(() => {
     navigation.navigate('Welcome');
     logout();
-  }
+  }, [navigation, logout]);
 
   return (
     <View style={[styles.header, colors.backgroundStyle]}>
@@ -45,6 +45,8 @@ const Header: React.FC = () => {
   );
 };
 
+export default React.memo(Header);
+
 const styles = StyleSheet.create({
   header: {
     height: 70,
@@ -68,5 +70,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export default Header;
