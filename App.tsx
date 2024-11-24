@@ -5,6 +5,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Routes from './src/routes/Routes';
 import {ThemeProvider} from './src/context/ThemeContext';
 import { AuthProvider } from './src/context/AuthContext';
+import { ProductProvider } from './src/context/ProductContext';
 
 function App(): React.JSX.Element {
   return (
@@ -12,7 +13,9 @@ function App(): React.JSX.Element {
       <GestureHandlerRootView style={{flex: 1}}>
         <ThemeProvider>
           <AuthProvider>
-            <Routes />
+            <ProductProvider>
+              <Routes />
+            </ProductProvider>
           </AuthProvider>
         </ThemeProvider>
       </GestureHandlerRootView>

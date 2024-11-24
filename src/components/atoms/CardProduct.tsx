@@ -1,20 +1,30 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, { useCallback } from 'react';
 import {useTheme} from '../../context/ThemeContext';
 import IconApp from '../../assets/icons/AllCustomIcons';
 import { CardProductProps } from '../../types/interfaces';
+import { useNavigation } from '@react-navigation/native';
+import { useProduct } from '../../context/ProductContext';
 
 const CardProduct: React.FC<CardProductProps> = ({item, stylesCard}) => {
+  const navigation: any = useNavigation();
   const {colors} = useTheme();
+  const {saveProduct} = useProduct();
+
+  const openDetailProduct = useCallback(() => {
+    saveProduct(item);
+    navigation.navigate('DetailProduct', {item});
+  }, [navigation, item]);
+
 
   return (
     <View style={[styles.container, colors.borderVariant, {...stylesCard}]}>
-      <View style={styles.info}>
+      <TouchableOpacity style={styles.info} onPress={openDetailProduct}>
         <Text style={[colors.colorText, styles.title]}>{item?.name}</Text>
         <Text style={[colors.colorText, styles.id]}>ID: {item?.id}</Text>
-      </View>
+      </TouchableOpacity>
 
-      <TouchableOpacity activeOpacity={0.6} style={styles.icon}>
+      <TouchableOpacity activeOpacity={0.6} style={styles.icon} onPress={openDetailProduct}>
         <IconApp
           name={'keyboard-arrow-right'}
           size={25}

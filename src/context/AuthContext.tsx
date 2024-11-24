@@ -1,10 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
+import { AuthContextProps } from '../types/interfaces';
 
-interface AuthContextProps {
-    isAuthenticated: boolean;
-    login: () => void;
-    logout: () => void;
-}
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
@@ -24,7 +20,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 export const useAuth = (): AuthContextProps => {
     const context = useContext(AuthContext);
     if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
+        throw new Error('No se puede usar el contexto sin un proveedor');
     }
     return context;
 };

@@ -59,8 +59,9 @@ export interface DatePickerProps {
 /**
  * @description Propiedades para el componente ErrorInput
  */
-export interface LabelAtomProps {
+export interface AtomPropsText {
   text: string;
+  style?: any;
 }
 
 /**
@@ -109,4 +110,22 @@ export interface SearchProps {
   searchText: string;
   setSearchText: (text: string) => void;
   onPress: (filteredData: any[]) => void;
+}
+
+/**
+ * @description Propiedades para AuthContext
+ */
+export interface AuthContextProps {
+  isAuthenticated: boolean;
+  login: () => void;
+  logout: () => void;
+}
+
+/**
+ * @description Propiedades para productContext
+ */
+export interface ProductContextProps {
+  product: ProductType | undefined;
+  saveProduct: (product: ProductType) => void;
+  deleteProduct: () => void;
 }
