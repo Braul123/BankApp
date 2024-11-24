@@ -1,8 +1,8 @@
 import {Text, StyleSheet} from 'react-native';
 import React from 'react';
-import { LabelAtomProps } from '../../types/interfaces';
+import { AtomPropsText } from '../../types/interfaces';
 
-const ErrorInput : React.FC<LabelAtomProps> = ({
+const ErrorInput : React.FC<AtomPropsText> = ({
   text
 }) => {
   return <Text style={[styles.label]}>{text}</Text>;

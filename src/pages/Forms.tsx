@@ -1,4 +1,11 @@
-import {View, StyleSheet, KeyboardAvoidingView, Platform, Alert, Text} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
+  Text,
+} from 'react-native';
 import React, {useCallback, useMemo, useState} from 'react';
 import MainLayout from '../layouts/MainLayout';
 import ProductFormOrganism from '../components/organism/FormProduct';
@@ -6,27 +13,34 @@ import {ProductType} from '../types/types';
 import ButtonPrimary from '../components/atoms/ButtonPrimary';
 import {colorsMain} from '../utils/colors';
 import {ScrollView} from 'react-native-gesture-handler';
-import { fetchCreateProduct, verificationID } from '../services/api/productService';
+import {
+  fetchCreateProduct,
+  verificationID,
+} from '../services/api/productService';
 import useFormValidation from '../hooks/ValidateForm';
-import { useNavigation } from '@react-navigation/native';
-import { useTheme } from '../context/ThemeContext';
+import {useNavigation} from '@react-navigation/native';
+import {useTheme} from '../context/ThemeContext';
+import TitlePages from '../components/atoms/TitlePages';
 
 export default function Forms() {
   const [submited, setSubmited] = useState(false);
   const navigation: any = useNavigation();
-  const initialFormData = useMemo(() => ({
-    id: '',
-    name: '',
-    description: '',
-    logo: '',
-    date_release: '',
-    date_revision: '',
-  }), []);
-  
+  const initialFormData = useMemo(
+    () => ({
+      id: '',
+      name: '',
+      description: '',
+      logo: '',
+      date_release: '',
+      date_revision: '',
+    }),
+    [],
+  );
+
   const [formData, setFormData] = useState<ProductType>(initialFormData);
 
   const {colors} = useTheme();
-  const { validateForm } = useFormValidation(formData);
+  const {validateForm} = useFormValidation(formData);
 
   // Envía el formulario
   const onSubmit = useCallback(() => {
@@ -61,15 +75,21 @@ export default function Forms() {
   const saveData = useCallback(async () => {
     try {
       await fetchCreateProduct(formData);
-      Alert.alert('Datos guardados', 'Los datos se han guardado correctamente', [
-        {
-          text: 'Seguir creando',
-        },
-        {
-          text: 'Ir a la lista',
-          onPress: () => { goBack() }
-        },
-      ]);
+      Alert.alert(
+        'Datos guardados',
+        'Los datos se han guardado correctamente',
+        [
+          {
+            text: 'Seguir creando',
+          },
+          {
+            text: 'Ir a la lista',
+            onPress: () => {
+              goBack();
+            },
+          },
+        ],
+      );
       resetForm();
     } catch (error) {
       console.error('Error al guardar los datos', error);
@@ -90,12 +110,10 @@ export default function Forms() {
         <ScrollView
           contentContainerStyle={{flexGrow: 1}}
           keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-          >
-            {/* Titulo de la pagina */}
-            <View style={[styles.titleContent]}>
-              <Text style={[colors.colorText, styles.title]}>Formulario de registro</Text>
-            </View>
+          showsVerticalScrollIndicator={false}>
+          {/* Título */}
+          <TitlePages title={'Formulario de registro'} />
+
           {/* Formulario */}
           <View style={{flex: 1}}>
             <ProductFormOrganism
@@ -145,5 +163,5 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-  }
+  },
 });

@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, View} from 'react-native';
 import SkeletonItemProduct from '../atoms/SkeletonItemProduct';
 import {getStylesCard} from '../../services/utils/styleUtils';
 
@@ -33,13 +33,5 @@ const SkeletonListProduct: React.FC<SkeletonListProductProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  skeletonItem: {
-    height: 20,
-    backgroundColor: '#e0e0e0',
-    marginVertical: 8,
-  },
-});
 
 export default React.memo(SkeletonListProduct);

@@ -7,6 +7,7 @@ import Home from '../pages/Home';
 import Forms from '../pages/Forms';
 import Header from '../layouts/Header';
 import {useTheme} from '../context/ThemeContext';
+import DetailProduct from '../pages/DetailProduct';
 
 export default function Routes() {
   const Nav = createNativeStackNavigator();
@@ -34,6 +35,13 @@ export default function Routes() {
           <Nav.Screen
             name="Forms"
             component={Forms}
+            options={{
+              headerShown: false,
+              gestureEnabled: true,
+            }}></Nav.Screen>
+          <Nav.Screen
+            name="DetailProduct"
+            component={DetailProduct}
             options={{
               headerShown: false,
               gestureEnabled: true,
