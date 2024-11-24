@@ -1,49 +1,45 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import InputField from '../molecules/InputField';
 import {ProductType} from '../../types/types';
 import {useTheme} from '../../context/ThemeContext';
 import useFormValidation from '../../hooks/ValidateForm';
 import { add, format, parse } from 'date-fns';
+import { ProductFormOrganismProps } from '../../types/interfaces';
 
-interface ProductFormOrganismProps {
-  dataForm: ProductType;
-  setFormData: any;
-  submited: boolean;
-}
 
-export default function ProductFormOrganism(data: ProductFormOrganismProps) {
+const ProductFormOrganism: React.FC<ProductFormOrganismProps> = ({ dataForm, setFormData, submited }) => {
 
   // Validación de formulario - Hook personalizado
-  const { errors, validateForm, resetValidation } = useFormValidation(data.dataForm);
+  const { errors, validateForm, resetValidation } = useFormValidation(dataForm);
 
   useEffect(() => {
-    if (data.submited) {
+    if (submited) {
       validateForm();
     } else {
       resetValidation();
     }
-  }, [data.dataForm, data.submited]);
+  }, [dataForm, submited]);
 
-  const handleChange = (field: any, value: any) => {
+  const handleChange = useCallback((field: string, value: any) => {
     let _value = value;
     // Si es el campo de fecha le da formato al valor
-    if ( field === 'date_release') {
-        // Se suma un año a la fecha de liberación para obtener la fecha de revisión
-        const date_revision = format(add(value, { years: 1 }), "yyyy-MM-dd'T'HH:mm:ss"); 
-        const parsedDate = format(_value, "yyyy-MM-dd'T'HH:mm:ss");
-        data.setFormData((prev: ProductType) => ({...prev, [field]: parsedDate, date_revision}));
+    if (field === 'date_release') {
+      // Se suma un año a la fecha de liberación para obtener la fecha de revisión
+      const date_revision = format(add(value, { years: 1 }), "yyyy-MM-dd'T'HH:mm:ss");
+      const parsedDate = format(_value, "yyyy-MM-dd'T'HH:mm:ss");
+      setFormData((prev: ProductType) => ({ ...prev, [field]: parsedDate, date_revision }));
     } else {
-      data.setFormData((prev: ProductType) => ({...prev, [field]: _value}));
+      setFormData((prev: ProductType) => ({ ...prev, [field]: _value }));
     }
-  };
+  }, [setFormData]);
 
   return (
     <View style={styles.form}>
       <InputField
         label="ID"
         placeholder="ID del producto"
-        value={data.dataForm?.id}
+        value={dataForm?.id}
         onChangeText={(text: string) => handleChange('id', text)}
         error={errors.id}
         maxLength={10}
@@ -52,7 +48,7 @@ export default function ProductFormOrganism(data: ProductFormOrganismProps) {
       <InputField
         label="Product Name"
         placeholder="Nombre del producto"
-        value={data.dataForm?.name}
+        value={dataForm?.name}
         onChangeText={(text: string) => handleChange('name', text)}
         error={errors.name}
         maxLength={100}
@@ -60,7 +56,7 @@ export default function ProductFormOrganism(data: ProductFormOrganismProps) {
       <InputField
         label="Description"
         placeholder="Descripción"
-        value={data.dataForm?.description}
+        value={dataForm?.description}
         onChangeText={(text: string) => handleChange('description', text)}
         error={errors.description}
         maxLength={200}
@@ -68,7 +64,7 @@ export default function ProductFormOrganism(data: ProductFormOrganismProps) {
       <InputField
         label="Logo"
         placeholder="Logo"
-        value={data.dataForm?.logo}
+        value={dataForm?.logo}
         onChangeText={(text: string) => handleChange('logo', text)}
         error={errors.logo}
         maxLength={100}
@@ -76,7 +72,7 @@ export default function ProductFormOrganism(data: ProductFormOrganismProps) {
       <InputField
         label="Fecha Liberación"
         placeholder="Fecha liberación"
-        value={data.dataForm?.date_release}
+        value={dataForm?.date_release}
         onChangeText={(text: string) => handleChange('date_release', text)}
         error={errors.date_release}
         maxLength={100}
@@ -91,7 +87,7 @@ export default function ProductFormOrganism(data: ProductFormOrganismProps) {
       <InputField
         label="Date Revision"
         placeholder="Fecha revisión"
-        value={data.dataForm?.date_revision}
+        value={dataForm?.date_revision}
         onChangeText={(text: string) => handleChange('date_revision', text)}
         error={errors.date_revision}
         maxLength={100}
@@ -106,6 +102,8 @@ export default function ProductFormOrganism(data: ProductFormOrganismProps) {
     </View>
   );
 }
+
+export default React.memo(ProductFormOrganism);
 
 const styles = StyleSheet.create({
   form: {

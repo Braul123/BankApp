@@ -3,40 +3,40 @@ import {View, StyleSheet, KeyboardTypeOptions} from 'react-native';
 import LabelAtom from '../atoms/LabelAtom';
 import InputAtom from '../atoms/Input';
 import ErrorInput from '../atoms/ErrorInput';
-import { TypeDatePickerInput } from '../../types/types';
+import { InputFieldProps } from '../../types/interfaces';
 
-interface InputFieldProps {
-  label: string;
-  placeholder: string;
-  value: string;
-  onChangeText: (text: string) => void;
-  keyboardType?: KeyboardTypeOptions;
-  error: any;
-  maxLength: number;
-  datePicker?: TypeDatePickerInput;
-  disabled?: boolean;
-}
-
-export default function InputField(data: InputFieldProps) {
+const InputField: React.FC<InputFieldProps> = ({
+  label,
+  placeholder,
+  value,
+  onChangeText,
+  keyboardType,
+  error,
+  maxLength,
+  datePicker,
+  disabled,
+}) => {
   return (
     <View style={styles.container}>
-      <LabelAtom text={data.label} />
+      <LabelAtom text={label} />
       <InputAtom
-        placeholder={data.placeholder}
-        value={data.value}
-        onChangeText={data.onChangeText}
-        keyboardType={data.keyboardType}
-        error={data.error}
-        maxLength={data.maxLength}
-        datePicker={data.datePicker}
-        disabled={data.disabled ? true : false}
+        placeholder={placeholder}
+        value={value}
+        onChangeText={onChangeText}
+        keyboardType={keyboardType}
+        error={error}
+        maxLength={maxLength}
+        datePicker={datePicker}
+        disabled={disabled ? true : false}
       />
-      {data.error && (
-        <ErrorInput text={data.error} />
+      {error && (
+        <ErrorInput text={error} />
       )}
     </View>
   );
 }
+
+export default React.memo(InputField);
 
 const styles = StyleSheet.create({
   container: {

@@ -1,43 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import {TextInput, StyleSheet, KeyboardTypeOptions, View, TouchableOpacity, Text} from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import {TextInput, StyleSheet, KeyboardTypeOptions, View, TouchableOpacity} from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
 import {colorsMain} from '../../utils/colors';
-import DatePicker from 'react-native-date-picker';
 import IconApp from '../../assets/icons/AllCustomIcons';
-import { TypeDatePickerInput } from '../../types/types';
 import DatePickerApp from './DatePicker';
-import { format, parse, parseISO } from 'date-fns';
+import { format} from 'date-fns';
+import { InputAtomProps } from '../../types/interfaces';
 
-interface InputAtomProps {
-  placeholder: string;
-  value: string;
-  onChangeText: (text: any) => void;
-  keyboardType?: KeyboardTypeOptions;
-  error: string;
-  maxLength: number;
-  datePicker?: TypeDatePickerInput,
-  disabled: boolean;
-}
-
-export default function InputAtom(data: InputAtomProps) {
+const InputAtom: React.FC<InputAtomProps> = ({
+  placeholder,
+  value,
+  onChangeText,
+  keyboardType,
+  error,
+  maxLength,
+  datePicker,
+  disabled
+}) => {
   const {colors, isDarkMode} = useTheme();
   const [open, setOpen] = useState(false);
   const [dateP, setDateP] = useState<any>();
 
   useEffect(() => {
-    if (data.datePicker){
-      setDateP(data.value);
+    if (datePicker){
+      setDateP(value);
     }
-  }, [data.value]);
+  }, [value]);
 
-  const parseDate = () => {    
+  // Parsea la fecha para mostrarla en el input - si no es fecha devuelve el valor original
+  const parseDate = useCallback(() => {
     if (dateP) {
       const dateFormat = new Date(dateP);
-      return format(dateFormat, "dd-MM-yyyy");
+      return format(dateFormat, 'dd-MM-yyyy');
     } else {
-      return data.value;
+      return value;
     }
-  }
+  }, [dateP, value]);
 
   return (
     <View>
@@ -45,31 +43,31 @@ export default function InputAtom(data: InputAtomProps) {
           style={[
             styles.input,
             colors.colorText,
-            {borderColor: data.error ? 'red' : colors.borderVariant.borderColor},
+            {borderColor: error ? 'red' : colors.borderVariant.borderColor},
           ]}
-          placeholder={data.placeholder}
+          placeholder={placeholder}
           placeholderTextColor={
             isDarkMode
               ? colorsMain.system.placeholderDarkMode
               : colorsMain.system.placeholderLigthMode
           }
           value={parseDate()}
-          onChangeText={data.onChangeText}
-          keyboardType={data.keyboardType}
-          maxLength={data.maxLength}
-          editable={!data.disabled}
+          onChangeText={onChangeText}
+          keyboardType={keyboardType}
+          maxLength={maxLength}
+          editable={!disabled}
         />
-        {data.datePicker && (
+        {datePicker && (
           <>
-            <TouchableOpacity style={styles.iconContainer} disabled={data.datePicker.disabled} onPress={() => setOpen(true)}>
+            <TouchableOpacity style={styles.iconContainer} disabled={datePicker.disabled} onPress={() => setOpen(true)}>
               <IconApp name={"calendar"} size={20} directoryName={'AntDesign'}/>
             </TouchableOpacity>
 
             <DatePickerApp
             open={open}
             setOpen={setOpen}
-            date={data.value}
-            onChangeText={(date: Date) => data.onChangeText(date)}
+            date={value}
+            onChangeText={(date: Date) => onChangeText(date)}
             minimumDate={new Date()}
             />
           </>
@@ -78,6 +76,8 @@ export default function InputAtom(data: InputAtomProps) {
     </View>
   );
 }
+
+export default React.memo(InputAtom);
 
 const styles = StyleSheet.create({
   input: {

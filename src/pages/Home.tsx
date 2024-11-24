@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, FlatList, RefreshControl } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import MainLayout from '../layouts/MainLayout'
 import { fetchGetProducts } from '../services/api/productService'
 import { useTheme } from '../context/ThemeContext';
@@ -9,63 +9,69 @@ import ButtonPrimary from '../components/atoms/ButtonPrimary';
 import { useNavigation } from '@react-navigation/native';
 
 export default function Home() {
+  const MemoizedCardProduct = React.memo(CardProduct);
   const { colors } = useTheme();
-  const [refreshing, setRefreshing] = useState(false); // Muestra el indicador de progreso del header (deslizar para refrescar)
+  const [refreshing, setRefreshing] = useState(false);
   const navigation: any = useNavigation();
-  const [products, setProducts] = useState(
-    [
-      {
-      "id": "uno",
-      "name": "Nombre producto",
-      "description": "Descripción producto",
-      "logo": "assets-1.png",
-      "date_release": "2025-01-01",
-      "date_revision": "2025-01-01"
-      },
-      {
-      "id": "dps",
-      "name": "Nombre producto",
-      "description": "Descripción producto",
-      "logo": "assets-1.png",
-      "date_release": "2025-01-01",
-      "date_revision": "2025-01-01"
-      }
-      ]
-  );
+  const [products, setProducts] = useState<any>();
 
   useEffect(() => {
     getProducts();
   }, [])
 
-  const onRefresh = () => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     getProducts();
-  }
-
+  }, []);
+  
   // Obtiene los productos
   const getProducts = async () => {
     try {
-      const products = await fetchGetProducts();
+      const _products: any = await fetchGetProducts();
+      setProducts(_products.data);
       setTimeout(() => {
         setRefreshing(false);
-      }, 200);
-      console.log('PRODUCTOS',products);
+      }, 500);
+      console.log('PRODUCTOS',_products.data);
     } catch (error) {
       console.log(error);
     }
   }
 
   // Renderiza cada item del FlatList
-  const renderItem = ({ item }: { item: ProductType }) => (
-    <CardProduct {...item}/>
-  );
+  const renderItem = useCallback(({ item, index }: { item: ProductType, index: number }) => {
+    let stylesCard: any;
+
+    // Aplica los bordes redondeados al primer y último item
+    switch (index) {
+      case 0:
+        stylesCard = {
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+        }
+        break;
+      case products.length - 1:
+        stylesCard = {
+          borderBottomLeftRadius: 10,
+          borderBottomRightRadius: 10,
+        }
+        break;
+      default:
+        stylesCard = {
+          borderBottomWidth: 1,
+        }
+        break;
+    }
+
+    return (
+      <MemoizedCardProduct item={item} stylesCard={stylesCard}/>
+    )
+  }, [products]);
 
   // Redirecciona a la vista de creacion de producto
-  const createProduct = () => {
-    console.log('Crear producto');
+  const createProduct = useCallback(() => {
     navigation.navigate({name: 'Forms', params: {type: 'create'}});
-  }
-
+  }, [navigation]);
 
   return (
     <MainLayout>
@@ -76,6 +82,8 @@ export default function Home() {
             data={products}
             renderItem={renderItem}
             keyExtractor={item => item.id}
+            initialNumToRender={10}
+            maxToRenderPerBatch={10}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }

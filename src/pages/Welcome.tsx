@@ -1,5 +1,5 @@
 import {View, Text, Image} from 'react-native';
-import React from 'react';
+import React, { useCallback } from 'react';
 import {useTheme} from '../context/ThemeContext';
 import MainLayout from '../layouts/MainLayout';
 import {styles} from '../styles/welcome.styles';
@@ -13,12 +13,11 @@ export default function Welcome() {
   const {login} = useAuth();
   const navigation: any = useNavigation();
 
-
-  const initApp = () => {
+  const initApp = useCallback(() => {
     navigation.navigate('Home');
     login();
-  }
-
+  }, [navigation, login]);
+  
   return (
     <MainLayout>
       <View style={styles.content}>

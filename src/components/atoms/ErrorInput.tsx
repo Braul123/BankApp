@@ -1,18 +1,18 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {Text, StyleSheet} from 'react-native';
 import React from 'react';
+import { LabelAtomProps } from '../../types/interfaces';
 
-interface LabelAtomProps {
-  text: string;
+const ErrorInput : React.FC<LabelAtomProps> = ({
+  text
+}) => {
+  return <Text style={[styles.label]}>{text}</Text>;
 }
 
-export default function ErrorInput(data: LabelAtomProps) {
-  return <Text style={[styles.label]}>{data.text}</Text>;
-}
+export default React.memo(ErrorInput);
 
 const styles = StyleSheet.create({
   label: {
     fontSize: 12,
     color: 'red',
-    // fontWeight: 'bold',
   },
 });

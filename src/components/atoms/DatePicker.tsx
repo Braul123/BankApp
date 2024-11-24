@@ -1,30 +1,31 @@
 import {View, Text, Button} from 'react-native';
 import React, {useState} from 'react';
 import DatePicker from 'react-native-date-picker';
+import { DatePickerProps } from '../../types/interfaces';
 
-interface DatePickerProps {
-    open: boolean;
-    setOpen: (open: boolean) => void;
-    date: any;
-    onChangeText: (date: any) => void;
-    minimumDate: Date;
-}
-
-export default function DatePickerApp(data: DatePickerProps) {
+const DatePickerApp :React.FC<DatePickerProps> = ({
+  open,
+  setOpen,
+  date,
+  onChangeText,
+  minimumDate
+}) => {
   return (
     <View>
       <DatePicker
         modal
         mode="date"
-        open={data.open}
-        date={new Date(data.date)}
-        minimumDate={data.minimumDate}
+        open={open}
+        date={new Date(date)}
+        minimumDate={minimumDate}
         onConfirm={date => {
-            data.setOpen(false);
-            data.onChangeText(date);
+            setOpen(false);
+            onChangeText(date);
         }}
-        onCancel={() => data.setOpen(false)}
+        onCancel={() => setOpen(false)}
       />
     </View>
   );
 }
+
+export default React.memo(DatePickerApp);
