@@ -44,7 +44,7 @@ const InputAtom: React.FC<InputAtomProps> = ({
           style={[
             styles.input,
             colors.colorText,
-            {borderColor: error ? 'red' : colors.borderVariant.borderColor, opacity: disabled && !datePicker ? 0.5 : 1},
+            {borderColor: error ? 'red' : colors?.borderVariant?.borderColor, opacity: disabled && !datePicker ? 0.5 : 1},
           ]}
           placeholder={placeholder}
           placeholderTextColor={

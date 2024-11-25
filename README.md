@@ -1,79 +1,140 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# BankApp
 
-# Getting Started
+BankApp es una aplicación bancaria diseñada para facilitar la gestión de cuentas bancarias, transferencias y consultas de saldo.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Características
 
-## Step 1: Start the Metro Server
+- **Gestión de cuentas**: Crear, editar y eliminar cuentas bancarias.
+- **Transferencias**: Realizar transferencias entre cuentas.
+- **Consultas de saldo**: Ver el saldo actual de las cuentas.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## Configuración del proyecto
 
-```bash
-# using npm
-npm start
+El proyecto está organizado siguiendo algunos principios de la arquitectura hexagonal, que promueve una separación clara entre la lógica de negocio y las implementaciones técnicas. Esto facilita el mantenimiento, escalabilidad y testeo de la aplicación.
 
-# OR using Yarn
-yarn start
+### Carpetas principales
+
+```plaintext
+src/
+  ├── assets/
+  │   ├── icons/
+  │   ├── images/
+  ├── components/
+  │   ├── atoms/
+  │   ├── molecules/
+  │   └── organism/
+  ├── context/
+  ├── hooks/
+  ├── layouts/
+  ├── pages/
+  ├── routes/
+  ├── services/
+  ├── styles/
+  ├── types/
+  │   ├── interface/
+  │   ├── types/
+  ├── utils/
+  ├── App.tsx
+index.js
+tsconfig.json
+package.json
+README.md
 ```
 
-## Step 2: Start your Application
+### Description
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+#### `assets/`
 
-### For Android
+  - **icons/**: Contiene las definiciones de los iconos que son consumidos en toda la aplicacion.
+  - **images/**: Contiene las imagenes de la aplicación.
 
-```bash
-# using npm
-npm run android
+#### `components/`
 
-# OR using Yarn
-yarn android
-```
+  - **atoms/**: Componentes básicos, reutilizables y sin dependencias externas, como botones o etiquetas..
+  - **molecules/**: Componentes formados por una combinación de átomos, como formularios simples o grupos de etiquetas.
+  - **organism/**: Componentes más complejos, compuestos por moléculas y átomos, como secciones completas de la interfaz.
 
-### For iOS
+#### `context/`
 
-```bash
-# using npm
-npm run ios
+  - **context/**: Contiene las definiciones de los iconos que son consumidos en toda la aplicacion.
 
-# OR using Yarn
-yarn ios
-```
+#### `hooks/`
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+  - **hooks/**: Incluye hooks personalizados para encapsular y reutilizar lógica, como manejo de formularios o peticiones API.
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+#### `layouts/`
 
-## Step 3: Modifying your App
+  - **layouts/**: Componentes encargados de definir la estructura general de las páginas, como encabezados, barras laterales o pies de página.
 
-Now that you have successfully run the app, let's modify it.
+#### `pages/`
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+  - **pages/**: Contiene los componentes que representan páginas completas y únicas de la aplicación, generalmente asociadas a una ruta específica.
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+#### `routes/`
 
-## Congratulations! :tada:
+  - **routes/**: Define las rutas principales de la aplicación, incluyendo la configuración de navegación y protección de rutas (guardias).
 
-You've successfully run and modified your React Native App. :partying_face:
+#### `services/`
 
-### Now what?
+  - **services/**: Contiene funciones o clases dedicadas a interactuar con APIs externas, manejar datos o realizar lógica de negocio.
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+#### `styles/`
 
-# Troubleshooting
+  - **styles/**: Almacena los estilos globales o compartidos, como hojas de estilo CSS o temas para la aplicación.
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+#### `types/`
 
-# Learn More
+  - **types/**: Estructura los tipos e interfaces utilizados en la aplicación para aprovechar las capacidades de TypeScript.
 
-To learn more about React Native, take a look at the following resources:
+#### `utils/`
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+  - **utils/**: Incluye funciones auxiliares y utilitarias, como manejo de fechas, validaciones o transformaciones de datos.
+
+
+## Requisitos
+
+- Node.js (>= 20.x)
+- npm (>= 10.x) o yarn (>= 1.22.x)
+
+## Instalación
+
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/Braul123/BankApp.git
+   ```
+2. Navega al directorio del proyecto:
+   ```bash
+   cd bankapp
+   ```
+3. Instala las dependencias:
+   ```bash
+   yarn install
+   ```
+
+4. Intala cocoapods
+   - Navega a la plataforma ios/
+   ```bash
+   pod install
+   ```
+
+## Uso
+
+1. Inicia la aplicación:
+   ```bash
+   yarn start
+   ```
+
+## Contribución
+
+1. Haz un fork del repositorio.
+2. Crea una rama nueva (`git checkout -b feature/nueva-caracteristica`).
+3. Realiza tus cambios y haz commit de ellos (`git commit -m '[feat]: Agrega nueva característica'`).
+4. Sube tus cambios a tu rama (`git push origin feature/nueva-caracteristica`).
+5. Abre un Pull Request.
+
+## Licencia
+
+Todos los derechos reservados
+
+### &copy; 2024 TI

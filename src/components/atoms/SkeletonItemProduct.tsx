@@ -31,7 +31,7 @@ const SkeletonItemProduct: React.FC<stylesProps> = ({stylesContent}) => {
           name={'keyboard-arrow-right'}
           size={25}
           directoryName={'MaterialIcons'}
-          color={colors.borderVariant.borderColor}
+          color={colors?.borderVariant?.borderColor}
         />
       </View>
     </View>
