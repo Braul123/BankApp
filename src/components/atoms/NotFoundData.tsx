@@ -2,12 +2,7 @@ import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
 import SvgComponent from '../../assets/images/notFound';
-
-interface PropsNotFoundData {
-  width: number;
-  heigth: number;
-  textBottom: string;
-}
+import { PropsNotFoundData } from '../../types/interfaces';
 
 const NotFoundData: React.FC<PropsNotFoundData> = ({
   width,
@@ -28,7 +23,6 @@ const NotFoundData: React.FC<PropsNotFoundData> = ({
 
 const styles = StyleSheet.create({
   contentLayout: {
-    flex: 1,
     padding: 30,
     justifyContent: 'flex-start',
     paddingTop: 50,
