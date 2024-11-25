@@ -1,11 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useTheme} from '../../context/ThemeContext';
-
-interface TitlePagesProps {
-  title?: string;
-  subtitle?: string;
-}
+import { TitlePagesProps } from '../../types/interfaces';
 
 const TitlePages: React.FC<TitlePagesProps> = ({title, subtitle}) => {
   const {colors} = useTheme();

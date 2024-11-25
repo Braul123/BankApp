@@ -5,7 +5,8 @@ import { colorsType } from "../types/types"
 export const colorsMain = {
     brand: {
         // backgroundPrimary: '#fde615',
-        backgroundPrimary: '#f8e000',
+        // backgroundPrimary: '#f8e000',
+        backgroundPrimary: '#fde000',
         backgroundSecondary: '#d8e9ff',
     },
     system: {

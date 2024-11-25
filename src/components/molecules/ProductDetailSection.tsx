@@ -2,11 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import LabelAtom from '../atoms/LabelAtom';
 import TextAtom from '../atoms/TextAtom';
-
-interface ProductDetailSectionProps {
-    label: string;
-    value: string;
-}
+import { ProductDetailSectionProps } from '../../types/interfaces';
 
 const ProductDetailSection: React.FC<ProductDetailSectionProps> = ({
     label,

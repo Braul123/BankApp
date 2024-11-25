@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, FlatList, RefreshControl } from 'react-native'
+import { View, Text, ScrollView, FlatList, RefreshControl, Alert } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import MainLayout from '../layouts/MainLayout'
 import { fetchGetProducts } from '../services/api/productService'
@@ -6,16 +6,19 @@ import { useTheme } from '../context/ThemeContext';
 import { ProductType } from '../types/types';
 import CardProduct from '../components/atoms/CardProduct';
 import ButtonPrimary from '../components/atoms/ButtonPrimary';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import SkeletonListProduct from '../components/molecules/SkeletonListProduct';
 import { getStylesCard } from '../services/utils/styleUtils';
 import NotFoundData from '../components/atoms/NotFoundData';
 import SearchApp from '../components/molecules/SearchApp';
 import { styles } from '../styles/home.styles';
+import { useProduct } from '../context/ProductContext';
+import { he } from 'date-fns/locale';
 
 export default function Home() {
   const MemoizedCardProduct = React.memo(CardProduct);
   const { colors } = useTheme();
+  const {deleteProduct} = useProduct();
   const [refreshing, setRefreshing] = useState(false);
   const navigation: any = useNavigation();
   const [products, setProducts] = useState<any>([]);
@@ -24,9 +27,13 @@ export default function Home() {
 
   const [isProgress, setIsProgress] = useState(true);
 
-  useEffect(() => {
-    getProducts();
-  }, [])
+  // Usa el hook useFocusEffect para obtener los productos en cuanto ingresa a la vista
+  useFocusEffect(
+    useCallback(() => {
+      getProducts();
+      deleteProduct();
+    }, [])
+  );
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -44,9 +51,14 @@ export default function Home() {
         setIsProgress(false);
         setRefreshing(false);
       }, 500);
-      console.log('PRODUCTOS',_products.data);
     } catch (error) {
-      console.log(error);
+      setTimeout(() => {
+        setIsProgress(false);
+        setRefreshing(false);
+        setTimeout(() => {
+          Alert.alert('Error', 'Ocurrió un error obteniendo los productos');
+        }, 200);
+      }, 500);
     }
   }
 
@@ -60,7 +72,7 @@ export default function Home() {
 
   // Redirecciona a la vista de creacion de producto
   const createProduct = useCallback(() => {
-    navigation.navigate({name: 'Forms', params: {type: 'create'}});
+    navigation.navigate('FormProduct', {isEdit: false});
   }, [navigation]);
 
   // Filtra los productos
@@ -78,7 +90,6 @@ export default function Home() {
           searchText={searchText}
           setSearchText={setSearchText}/>
         }
- 
           {
             isProgress ? (
               <View style={styles.layoutHome}>
@@ -88,25 +99,42 @@ export default function Home() {
               <>
                 {
                   products.length === 0 ? (
-                    <View style={{flex:1}}>
+                    <View style={{flex:1, alignItems: "center"}}>
                       <NotFoundData
-                      width={240}
-                      heigth={300}
+                      width={140}
+                      heigth={200}
                       textBottom={'Opps! No se encontró nada aquí, crea tu primer producto desde el botón Agregar.'}/>
+                      {/* Reintenta la petición */}
+                      <ButtonPrimary
+                      onPress={() => {setIsProgress(true); getProducts()}}
+                      title={'Refrescar'}
+                      status={'enabled'}
+                      typeButton={"secondary"}
+                      style={{width: 200, height: 50}}
+                      />
+
                     </View>
                   ) : (
+                    productsFilter.length === 0 ? (
+                      <View style={{flex:1}}>
+                        <NotFoundData
+                           width={140}
+                           heigth={200}
+                          textBottom={'No se econtraron resultados para tu búsqueda'}/>
+                      </View>
+                    ) : (
                       <FlatList
-                      style={[colors.borderVariant, {paddingTop: 30}]}
-                      data={productsFilter}
-                      renderItem={renderItem}
-                      keyExtractor={item => item.id}
-                      initialNumToRender={10}
-                      maxToRenderPerBatch={10}
-                      refreshControl={
-                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                      }
-                    />
-
+                        style={[colors.borderVariant, {paddingTop: 30}]}
+                        data={productsFilter}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.id}
+                        initialNumToRender={10}
+                        maxToRenderPerBatch={10}
+                        refreshControl={
+                          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        }
+                      />
+                    )
                   )
                 }
               </>

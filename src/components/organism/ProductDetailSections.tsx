@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ProductType } from '../../types/types';
 import ProductDetailSection from '../molecules/ProductDetailSection';
@@ -13,6 +13,7 @@ const ProductDetailSections: React.FC<ProductType> = ({
     date_release,
     date_revision
 }) => {
+
     return (
         <View>
             <ProductDetailSection label={'Nombre'} value={name}/>

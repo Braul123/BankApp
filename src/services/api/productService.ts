@@ -53,3 +53,35 @@ export const verificationID = async (id: string) => {
         })
     }
 )}
+
+/**
+ * @function fetchUpdateProduct
+ * @description Actualiza un producto.
+ */
+export const fetchUpdateProduct = async (data: ProductType) => {
+    return new Promise(async (resolve, reject) => {
+        const API = await getApiUrl();
+        axiosInstance.put(`${API}bp/products/${data.id}`, data).then(async (result: any) => {
+            resolve(result);
+        }).catch((error) => {
+            reject(error);
+            console.error('ERROR EN LA PETICION', error);
+        })
+    }
+)}
+
+/**
+ * @function fetchDeleteProduct
+ * @description Elimina un producto.
+ */
+export const fetchDeleteProduct = async (id: string) => {
+    return new Promise(async (resolve, reject) => {
+        const API = await getApiUrl();
+        axiosInstance.delete(`${API}bp/products/${id}`).then(async (result: any) => {
+            resolve(result);
+        }).catch((error) => {
+            reject(error);
+            console.error('ERROR EN LA PETICION', error);
+        })
+    }
+)}
