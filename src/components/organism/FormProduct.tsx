@@ -8,7 +8,7 @@ import { add, format, parse } from 'date-fns';
 import { ProductFormOrganismProps } from '../../types/interfaces';
 
 
-const ProductFormOrganism: React.FC<ProductFormOrganismProps> = ({ dataForm, setFormData, submited }) => {
+const ProductFormOrganism: React.FC<ProductFormOrganismProps> = ({ dataForm, setFormData, submited, isEdit }) => {
 
   // Validación de formulario - Hook personalizado
   const { errors, validateForm, resetValidation } = useFormValidation(dataForm);
@@ -44,6 +44,7 @@ const ProductFormOrganism: React.FC<ProductFormOrganismProps> = ({ dataForm, set
         error={errors.id}
         maxLength={10}
         keyboardType='numeric'
+        disabled={isEdit}
       />
       <InputField
         label="Product Name"

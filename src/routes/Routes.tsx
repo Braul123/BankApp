@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import Welcome from '../pages/Welcome';
 import Home from '../pages/Home';
-import Forms from '../pages/Forms';
+import FormProduct from '../pages/FormProduct';
 import Header from '../layouts/Header';
 import {useTheme} from '../context/ThemeContext';
 import DetailProduct from '../pages/DetailProduct';
@@ -33,8 +33,8 @@ export default function Routes() {
               gestureEnabled: false,
             }}></Nav.Screen>
           <Nav.Screen
-            name="Forms"
-            component={Forms}
+            name="FormProduct"
+            component={FormProduct}
             options={{
               headerShown: false,
               gestureEnabled: true,

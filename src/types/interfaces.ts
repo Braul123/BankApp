@@ -1,3 +1,4 @@
+
 /**
  * @fileoverview Interfaces for the app
  */
@@ -100,6 +101,7 @@ export interface ProductFormOrganismProps {
   dataForm: ProductType;
   setFormData: any;
   submited: boolean;
+  isEdit: boolean;
 }
 
 /**
@@ -128,4 +130,29 @@ export interface ProductContextProps {
   product: ProductType | undefined;
   saveProduct: (product: ProductType) => void;
   deleteProduct: () => void;
+}
+
+/**
+ * @description Propiedades para el componente PropsNotFoundData
+ */
+export interface PropsNotFoundData {
+  width: number;
+  heigth: number;
+  textBottom: string;
+}
+
+/**
+ * @description Propiedades para el componente TitlePages
+ */
+export interface TitlePagesProps {
+  title?: string;
+  subtitle?: string;
+}
+
+/**
+ * @description Propiedades para el componente ProductDetailSection
+ */
+export interface ProductDetailSectionProps {
+  label: string;
+  value: string;
 }

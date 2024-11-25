@@ -15,16 +15,16 @@ import {colorsMain} from '../utils/colors';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
   fetchCreateProduct,
+  fetchUpdateProduct,
   verificationID,
 } from '../services/api/productService';
 import useFormValidation from '../hooks/ValidateForm';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {useTheme} from '../context/ThemeContext';
 import TitlePages from '../components/atoms/TitlePages';
+import { useProduct } from '../context/ProductContext';
 
-export default function Forms() {
-  const [submited, setSubmited] = useState(false);
-  const navigation: any = useNavigation();
+export default function FormProduct() {
   const initialFormData = useMemo(
     () => ({
       id: '',
@@ -36,18 +36,34 @@ export default function Forms() {
     }),
     [],
   );
-
+  const [submited, setSubmited] = useState(false);
+  const navigation: any = useNavigation();
+  const router: any = useRoute();
   const [formData, setFormData] = useState<ProductType>(initialFormData);
-
-  const {colors} = useTheme();
+  const [isEdit, setIsEdit] = useState(false);
+  // Context 
+  const {product, saveProduct} = useProduct();
   const {validateForm} = useFormValidation(formData);
+
+  // Si se recibe un producto, se asigna a los datos del formulario
+  useMemo(() => {
+    if (router.params && router.params?.isEdit && product) {
+      setFormData(product);
+      setIsEdit(true);
+    }
+  }, [router.params, product]);
 
   // Envía el formulario
   const onSubmit = useCallback(() => {
     setSubmited(true);
     // Si el formulario es válido, guarda los datos
     if (validateForm()) {
-      validateID();
+      // Si no esta editando un producto se valida el ID y se guarda
+      if (!isEdit) {
+        validateID();
+      } else {
+        updateProduct();
+      }
     }
   }, [validateForm, formData]);
 
@@ -62,6 +78,7 @@ export default function Forms() {
         Alert.alert('ID ya registrado', 'El ID del producto ya existe');
       }
     } catch (error) {
+      Alert.alert('Error', 'Ocurrió un error de verificación, vuelve a intentarlo más tarde');
       console.error('Error al preparar los datos', error);
     }
   }, [formData]);
@@ -80,10 +97,7 @@ export default function Forms() {
         'Los datos se han guardado correctamente',
         [
           {
-            text: 'Seguir creando',
-          },
-          {
-            text: 'Ir a la lista',
+            text: 'Aceptar',
             onPress: () => {
               goBack();
             },
@@ -92,9 +106,33 @@ export default function Forms() {
       );
       resetForm();
     } catch (error) {
+      Alert.alert('Error', 'Ocurrió un error al guardar los datos, vuelve a intentarlo más tarde');
       console.error('Error al guardar los datos', error);
     }
-  }, [formData, goBack]);
+  }, [formData]);
+
+  // Actualiza los datos del producto
+  const updateProduct = useCallback(async () => {
+    try {
+      await fetchUpdateProduct(formData);
+      saveProduct(formData)
+      Alert.alert(
+        'Datos actualizados',
+        'Los datos se han actualizado correctamente',
+        [
+          {
+            text: 'Ok',
+            onPress: () => {
+              goBack();
+            },
+          },
+        ],
+      );
+      // resetForm();
+    } catch (error) {
+      Alert.alert('Error', 'Ocurrió un error actualizando los datos, vuelve a intentarlo más tarde');
+    }
+  }, [formData]);
 
   // Reinicia el formulario
   const resetForm = useCallback(() => {
@@ -112,7 +150,7 @@ export default function Forms() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}>
           {/* Título */}
-          <TitlePages title={'Formulario de registro'} />
+          <TitlePages title={!isEdit ? 'Formulario de registro' : 'Edita tu producto'} />
 
           {/* Formulario */}
           <View style={{flex: 1}}>
@@ -120,6 +158,7 @@ export default function Forms() {
               dataForm={formData}
               setFormData={setFormData}
               submited={submited}
+              isEdit={isEdit}
             />
           </View>
         </ScrollView>
@@ -128,14 +167,14 @@ export default function Forms() {
         <View style={styles.contentButtonForm}>
           <ButtonPrimary
             onPress={onSubmit}
-            title={'Enviar'}
+            title={!isEdit ? 'Enviar' : 'Guardar'}
             status={'enabled'}
             typeButton={'primary'}
             style={{height: 50}}
           />
           <ButtonPrimary
-            onPress={resetForm}
-            title={'Reiniciar'}
+            onPress={!isEdit ? resetForm : goBack}
+            title={!isEdit ? 'Reiniciar' : 'Cancelar'}
             status={'enabled'}
             typeButton={'secondary'}
             style={{
