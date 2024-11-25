@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, FlatList, RefreshControl, Alert } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import { View, FlatList, RefreshControl, Alert } from 'react-native'
+import React, { useCallback, useState } from 'react'
 import MainLayout from '../layouts/MainLayout'
 import { fetchGetProducts } from '../services/api/productService'
 import { useTheme } from '../context/ThemeContext';
@@ -13,7 +13,6 @@ import NotFoundData from '../components/atoms/NotFoundData';
 import SearchApp from '../components/molecules/SearchApp';
 import { styles } from '../styles/home.styles';
 import { useProduct } from '../context/ProductContext';
-import { he } from 'date-fns/locale';
 
 export default function Home() {
   const MemoizedCardProduct = React.memo(CardProduct);
@@ -92,7 +91,7 @@ export default function Home() {
         }
           {
             isProgress ? (
-              <View style={styles.layoutHome}>
+              <View style={styles.layoutHome} testID='skeleton-list-product'>
                 <SkeletonListProduct numberOfSkeletons={5}/>
               </View>
             ): (
@@ -124,6 +123,7 @@ export default function Home() {
                       </View>
                     ) : (
                       <FlatList
+                        testID='flat-list-products'
                         style={[colors.borderVariant, {paddingTop: 30}]}
                         data={productsFilter}
                         renderItem={renderItem}
@@ -140,8 +140,9 @@ export default function Home() {
               </>
             )
           }
-          <View style={{paddingVertical: 10}}>
-            <ButtonPrimary onPress={() => createProduct()} title={'Agregar'} status={'enabled'} typeButton={'primary'}/>
+          <View style={{paddingVertical: 10}} testID='button-add-product'>
+            <ButtonPrimary
+            onPress={() => createProduct()} title={'Agregar'} status={'enabled'} typeButton={'primary'}/>
           </View>
       </View>
     </MainLayout>

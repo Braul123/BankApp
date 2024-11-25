@@ -29,7 +29,7 @@ const CardProduct: React.FC<CardProductProps> = ({item, stylesCard}) => {
           name={'keyboard-arrow-right'}
           size={25}
           directoryName={'MaterialIcons'}
-          color={colors.borderVariant.borderColor}
+          color={colors?.borderVariant?.borderColor}
         />
       </TouchableOpacity>
     </View>
