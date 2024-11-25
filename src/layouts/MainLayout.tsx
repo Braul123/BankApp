@@ -10,6 +10,7 @@ const MainLayout: React.FC<{children: React.ReactNode}> = ({children}) => {
       <StatusBar
         hidden={false}
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={colors?.backgroundStyle?.backgroundColor}
       />
       <View style={styles.content}>{children}</View>
     </View>
