@@ -13,6 +13,7 @@ import { ProductType } from '../../types/types';
 export const fetchGetProducts = async () => {
     return new Promise(async (resolve, reject) => {
         const API = await getApiUrl();
+        console.log('AQUI API', API);
         axiosInstance.get(`${API}bp/products`).then(async (result: any) => {
             resolve(result.data);
         }).catch((error) => {
